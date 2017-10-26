@@ -32,7 +32,7 @@ def run():
             text=recog.recognize()
             if text != None:
                 if "slack" in text:
-                    post_message(message=text[len("slack"):], channel=channel)
+                    slack = True
             event_list = MA_slack_client.rtm_read()
             if len(event_list) > 0:
                 for event in event_list:
@@ -108,6 +108,8 @@ def handle_message(message, user, channel):
         post_message(message=say_bye(user_mention), channel=channel)
     elif is_say(message):
         aiy.audio.say(message[4:])
+    elif slack:
+        post_message(message=text[len("slack"):], channel=channel)
 
 if __name__=='__main__':
     run()
