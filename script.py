@@ -25,6 +25,8 @@ def main():
             mixer.music.play(0)
             while pygame.mixer.music.get_busy():
                 pygame.time.Clock().tick(10)
+        if "repeat after me" in text:
+            aiy.audio.say(text[len("repeat after me"):])
         
 if __name__=='__main__':
     aiy.audio.say("Online !")
