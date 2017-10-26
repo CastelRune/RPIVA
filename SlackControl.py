@@ -12,6 +12,7 @@ MA_SLACK_NAME = "MagicAssistant"
 MA_SLACK_TOKEN = os.environ.get('MA_SLACK_TOKEN')
 MA_SLACK_ID = os.environ.get('MA_SLACK_ID')
 MA_slack_client = slackclient.SlackClient(MA_SLACK_TOKEN)
+assistant_name="Magic"
 def is_for_me(event):
     # TODO Implement later
     return True
