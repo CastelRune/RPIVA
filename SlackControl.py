@@ -12,7 +12,6 @@ MA_SLACK_NAME = "MagicAssistant"
 MA_SLACK_TOKEN = os.environ.get('MA_SLACK_TOKEN')
 MA_SLACK_ID = os.environ.get('MA_SLACK_ID')
 MA_slack_client = slackclient.SlackClient(MA_SLACK_TOKEN)
-assistant_name="Magic"
 def is_for_me(event):
     # TODO Implement later
     return True
@@ -25,16 +24,7 @@ def post_message(message, channel):
 def run():
     if MA_slack_client.rtm_connect():
         print('[.] MA is ON...')
-        aiy.audio.get_recorder().start()
         while True:
-            recog = aiy.cloudspeech.get_recognizer()
-            recog.expect_phrase(assistant_name)
-            text=recog.recognize()
-            if text != None:
-                print("Understood :",text)
-                if "slack" in text:
-                    slack = True
-                    print("Slack >> True")
             event_list = MA_slack_client.rtm_read()
             if len(event_list) > 0:
                 for event in event_list:
@@ -110,8 +100,6 @@ def handle_message(message, user, channel):
         post_message(message=say_bye(user_mention), channel=channel)
     elif is_say(message):
         aiy.audio.say(message[4:])
-    elif slack:
-        post_message(message=text[len("slack"):], channel=channel)
 
 if __name__=='__main__':
     run()
