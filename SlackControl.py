@@ -34,6 +34,7 @@ def run():
                 print("Understood :",text)
                 if "slack" in text:
                     slack = True
+                    print("Slack >> True")
             event_list = MA_slack_client.rtm_read()
             if len(event_list) > 0:
                 for event in event_list:
