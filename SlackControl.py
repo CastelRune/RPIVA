@@ -31,6 +31,7 @@ def run():
             recog.expect_phrase(assistant_name)
             text=recog.recognize()
             if text != None:
+                print("Understood :",text)
                 if "slack" in text:
                     slack = True
             event_list = MA_slack_client.rtm_read()
