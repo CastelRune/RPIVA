@@ -4,6 +4,9 @@ import random
 import aiy.audio
 import aiy.cloudspeech
 import aiy.voicehat
+import pygame
+from pygame import mixer
+import urllib
 
 # delay in seconds before checking for new events 
 SOCKET_DELAY = 1
@@ -12,6 +15,7 @@ MA_SLACK_NAME = "MagicAssistant"
 MA_SLACK_TOKEN = os.environ.get('MA_SLACK_TOKEN')
 MA_SLACK_ID = os.environ.get('MA_SLACK_ID')
 MA_slack_client = slackclient.SlackClient(MA_SLACK_TOKEN)
+musics = ['couilles','/home/pi/Music/osblc.mp3','pas','/home/pi/Music/pasla.mp3']
 def is_for_me(event):
     # TODO Implement later
     return True
@@ -70,10 +74,25 @@ def is_bye(message):
     return any(g in tokens
                for g in ['bye', 'goodbye', 'revoir', 'adios', 'later', 'cya'])
 
+def is_music(message):
+    tokens = [word.lower() for word in message.strip().split()]
+    return any(g in tokens
+               for g in musics)
 def is_say(message):
     tokens = [word.lower() for word in message.strip().split()]
     return any(g in tokens
                for g in ['$say'])
+def is_dl(message):
+    tokens = [word.lower() for word in message.strip().split()]
+    return any(g in tokens
+               for g in ['$download])
+    
+
+def is_list(message):
+    tokens = [word.lower() for word in message.strip().split()]
+    return any(g in tokens
+               for g in ['list','liste'])
+
 def say_hi(user_mention):
     """Say Hi to a user by formatting their mention"""
     response_template = random.choice(['Sup, {mention}...',
@@ -82,7 +101,9 @@ def say_hi(user_mention):
                                        'Bonjour!'])
     return response_template.format(mention=user_mention)
 
-
+def displist():
+    return musics
+    
 def say_bye(user_mention):
     """Say Goodbye to a user"""
     response_template = random.choice(['see you later, alligator...',
@@ -100,6 +121,26 @@ def handle_message(message, user, channel):
         post_message(message=say_bye(user_mention), channel=channel)
     elif is_say(message):
         aiy.audio.say(message[4:])
+    elif is_music(message):
+        if "pas" in message:
+            g="pas"
+        elif "couilles" in message:
+            g="couilles"
+        mtp = musics[musics.index(g)+1]
+        print("Playing",mtp)
+        pygame.display.set_mode((200,100))
+        mixer.init()
+        mixer.music.load(mtp)
+        mixer.music.play(0)
+        while pygame.mixer.music.get_busy():
+            pygame.time.Clock().tick(10)
+    elif is_list(message):
+        post_message(message=displist(), channel=channel)
+    elif is_dl(message):
+        dldm = urllib.URLopener()
+        url=message[9:]
+        name=url.split("/")[2]
+        dldm.retrieve(url,name)
 
 if __name__=='__main__':
     run()

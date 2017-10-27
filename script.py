@@ -14,6 +14,7 @@ def main():
     recog = aiy.cloudspeech.get_recognizer()
     recog.expect_phrase(assistant_name)
     text=recog.recognize()
+    button = aiy.voicehat.get_button()
     if text!=None:
         print(text)
         if "music" in text:
