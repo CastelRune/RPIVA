@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #coding: utf-8
 ## ChatBot BETA v.1.8.8
-## A ByteGaps project (c)
+## A Tellter project (c)
 #----------------------------------------------------------#
 
 # TODO
